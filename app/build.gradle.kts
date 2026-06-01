@@ -201,6 +201,10 @@ android {
             excludes += "META-INF/io.netty.versions.properties"
         }
     }
+
+    configurations.all {
+        exclude(group = "com.google.protobuf", module = "protobuf-javalite")
+    }
 }
 
 ksp {

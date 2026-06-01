@@ -107,6 +107,9 @@ import com.metrolist.music.constants.DiscordTokenKey
 import com.metrolist.music.constants.DiscordUseDetailsKey
 import com.metrolist.music.constants.EnableDiscordRPCKey
 import com.metrolist.music.constants.EnableLastFMScrobblingKey
+import com.metrolist.music.constants.EnableSpotifyLyricsSyncKey
+import com.metrolist.music.constants.SpotifyLyricsSyncIdKey
+import com.metrolist.music.constants.SpotifyLyricsSyncUrlKey
 import com.metrolist.music.constants.EnableSongCacheKey
 import com.metrolist.music.constants.PreCacheOnlyWifiKey
 import com.metrolist.music.constants.PreCacheTracksKey
@@ -184,6 +187,7 @@ import com.metrolist.music.utils.CoilBitmapLoader
 import com.metrolist.music.utils.DiscordRPC
 import com.metrolist.music.utils.NetworkConnectivityObserver
 import com.metrolist.music.utils.ScrobbleManager
+import com.metrolist.music.utils.SpotifyLyricsSyncManager
 import com.metrolist.music.utils.SyncUtils
 import com.metrolist.music.utils.YTPlayerUtils
 import com.metrolist.music.utils.dataStore
@@ -393,6 +397,7 @@ class MusicService :
     private var discordUpdateJob: kotlinx.coroutines.Job? = null
 
     private var scrobbleManager: ScrobbleManager? = null
+    private var spotifyLyricsSyncManager: SpotifyLyricsSyncManager? = null
 
     val automixItems = MutableStateFlow<List<MediaItem>>(emptyList())
 
@@ -889,6 +894,44 @@ class MusicService :
                     it.scrobbleDelaySeconds = delaySeconds
                 }
             }
+
+        // SpotifyLyrics Sync: watch for enable/disable and config changes
+        combine(
+            dataStore.data.map { it[EnableSpotifyLyricsSyncKey] ?: false }.distinctUntilChanged(),
+            dataStore.data.map { it[SpotifyLyricsSyncIdKey] ?: "" }.distinctUntilChanged(),
+            dataStore.data.map {
+                it[SpotifyLyricsSyncUrlKey]
+                    ?: "https://spotify-lyrics-three.vercel.app/api/meld-sync"
+            }.distinctUntilChanged(),
+        ) { enabled, syncId, syncUrl ->
+            Triple(enabled, syncId, syncUrl)
+        }.collect(scope) { (enabled, syncId, syncUrl) ->
+            if (enabled && syncId.isNotBlank()) {
+                val manager = spotifyLyricsSyncManager
+                if (manager != null) {
+                    manager.syncId = syncId
+                } else {
+                    spotifyLyricsSyncManager = SpotifyLyricsSyncManager(
+                        scope = scope,
+                        syncId = syncId,
+                        endpointUrl = syncUrl,
+                    ).also { mgr ->
+                        mgr.positionSupplier = { player.currentPosition }
+                        mgr.durationSupplier = { player.duration }
+                    }
+                    // If music is already playing when enabled, send an initial state
+                    if (player.isPlaying) {
+                        spotifyLyricsSyncManager?.onPlayStateChanged(
+                            isPlaying = true,
+                            metadata = player.currentMetadata,
+                        )
+                    }
+                }
+            } else {
+                spotifyLyricsSyncManager?.destroy()
+                spotifyLyricsSyncManager = null
+            }
+        }
 
         combine(
             dataStore.data.map { prefs ->
@@ -2144,6 +2187,12 @@ class MusicService :
             scrobbleManager?.onSongStart(player.currentMetadata, duration = player.duration)
         }
 
+        // SpotifyLyrics sync: notify track change
+        spotifyLyricsSyncManager?.onTrackChanged(
+            metadata = player.currentMetadata,
+            isPlaying = player.playWhenReady && player.playbackState == Player.STATE_READY,
+        )
+
         // Sync Cast when media changes and Cast is connected
         // Skip if this change was triggered by Cast sync (to prevent loops)
         if (castConnectionHandler?.isCasting?.value == true &&
@@ -2331,6 +2380,14 @@ class MusicService :
         // Scrobbling
         if (events.containsAny(Player.EVENT_IS_PLAYING_CHANGED)) {
             scrobbleManager?.onPlayerStateChanged(player.isPlaying, player.currentMetadata, duration = player.duration)
+        }
+
+        // SpotifyLyrics sync: play/pause state change
+        if (events.containsAny(Player.EVENT_IS_PLAYING_CHANGED)) {
+            spotifyLyricsSyncManager?.onPlayStateChanged(
+                isPlaying = player.isPlaying,
+                metadata = player.currentMetadata,
+            )
         }
     }
 
@@ -3604,6 +3661,10 @@ class MusicService :
             discordRpc?.closeRPC()
         }
         discordRpc = null
+        spotifyLyricsSyncManager?.destroy()
+        spotifyLyricsSyncManager = null
+        scrobbleManager?.destroy()
+        scrobbleManager = null
         connectivityObserver.unregister()
         abandonAudioFocus()
         releaseLoudnessEnhancer()
@@ -3870,6 +3931,8 @@ class MusicService :
     ) {
         if (reason == Player.DISCONTINUITY_REASON_SEEK) {
             scheduleCrossfade()
+            // SpotifyLyrics sync: notify seek
+            spotifyLyricsSyncManager?.onSeek(metadata = player.currentMetadata)
         }
     }
 

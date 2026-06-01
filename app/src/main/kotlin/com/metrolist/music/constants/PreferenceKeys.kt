@@ -209,6 +209,11 @@ val SpotifyUsernameKey = stringPreferencesKey("spotifyUsername")
 val SpotifyUserIdKey = stringPreferencesKey("spotifyUserId")
 val MusicSourceKey = stringPreferencesKey("musicSource")
 
+// SpotifyLyrics Sync
+val EnableSpotifyLyricsSyncKey = booleanPreferencesKey("enableSpotifyLyricsSync")
+val SpotifyLyricsSyncIdKey = stringPreferencesKey("spotifyLyricsSyncId")
+val SpotifyLyricsSyncUrlKey = stringPreferencesKey("spotifyLyricsSyncUrl")
+
 enum class MusicSource {
     YOUTUBE_MUSIC,
     SPOTIFY,

@@ -61,6 +61,13 @@ fun IntegrationScreen(
                     onClick = {
                         navController.navigate("settings/integrations/spotify")
                     }
+                ),
+                IntegrationCardItem(
+                    icon = painterResource(R.drawable.lyrics),
+                    title = { Text(stringResource(R.string.spotifylyrics_sync_integration)) },
+                    onClick = {
+                        navController.navigate("settings/integrations/spotifylyrics_sync")
+                    }
                 )
             )
         )

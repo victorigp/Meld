@@ -67,6 +67,7 @@ import com.metrolist.music.ui.screens.settings.integrations.LastFMSettings
 import com.metrolist.music.ui.screens.settings.integrations.ListenTogetherSettings
 import com.metrolist.music.ui.screens.settings.integrations.SpotifyPreloadScreen
 import com.metrolist.music.ui.screens.settings.integrations.SpotifySettings
+import com.metrolist.music.ui.screens.settings.integrations.SpotifyLyricsSyncSettings
 import com.metrolist.music.ui.screens.recognition.RecognitionScreen
 import com.metrolist.music.ui.screens.recognition.RecognitionHistoryScreen
 import com.metrolist.music.ui.screens.wrapped.WrappedScreen
@@ -426,6 +427,10 @@ fun NavGraphBuilder.navigationBuilder(
 
     composable("settings/integrations/spotify") {
         SpotifySettings(navController, scrollBehavior)
+    }
+
+    composable("settings/integrations/spotifylyrics_sync") {
+        SpotifyLyricsSyncSettings(navController)
     }
 
     composable("settings/integrations/spotify/preload") {

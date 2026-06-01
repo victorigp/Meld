@@ -500,6 +500,20 @@
     <string name="spotify_sync_likes_complete">Synced %1$d songs from Spotify</string>
     <string name="spotify_sync_likes_failed">Failed to sync liked songs from Spotify</string>
 
+    <!-- SpotifyLyrics Sync -->
+    <string name="spotifylyrics_sync_integration">SpotifyLyrics Sync</string>
+    <string name="spotifylyrics_sync_enable">Enable sync</string>
+    <string name="spotifylyrics_sync_enable_desc">Push playback state to your SpotifyLyrics web app in real time</string>
+    <string name="spotifylyrics_sync_id">Sync ID</string>
+    <string name="spotifylyrics_sync_id_desc">Your username or identifier for the web app</string>
+    <string name="spotifylyrics_sync_id_hint">Enter your Sync ID</string>
+    <string name="spotifylyrics_sync_url">Endpoint URL</string>
+    <string name="spotifylyrics_sync_url_desc">The URL where playback state is sent</string>
+    <string name="spotifylyrics_sync_url_hint">https://your-app.vercel.app/api/meld-sync</string>
+    <string name="spotifylyrics_sync_status_active">Syncing playback</string>
+    <string name="spotifylyrics_sync_status_inactive">Not syncing</string>
+    <string name="spotifylyrics_sync_id_empty_warning">Please enter a Sync ID to enable synchronization</string>
+
     <string name="details_desc">View the song\'s details</string>
     <string name="edit_desc">Edit the title or artist</string>
     <string name="start_radio_desc">Start a radio based on this item</string>
