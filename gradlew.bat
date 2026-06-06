@@ -17,6 +17,7 @@
 @rem
 
 @if "%DEBUG%"=="" @echo off
+set _JAVA_OPTIONS=
 @rem ##########################################################################
 @rem
 @rem  Gradle startup script for Windows
