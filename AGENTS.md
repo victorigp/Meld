@@ -283,3 +283,25 @@ git checkout -b rebase-attempt backup-my-work  # start over
 - **If a single cherry-pick produces more than 5 conflicts in custom files**: stop, report it, and wait for instructions before proceeding.
 - **Progress log**: maintain a `rebase_progress.log` file recording each applied commit, its status (SAFE/RESOLVED/SKIPPED), and any relevant notes.
 - Speed is never the goal. It is better to spend 10 hours and produce a perfect result than to risk losing even a single line of custom code.
+
+## Building the Release Version
+
+When asked to generate the release version (e.g., `./gradlew :app:assembleFossRelease`), you must ensure that `app/build.gradle.kts` is configured to fallback to the debug keystore if the `STORE_PASSWORD` environment variable is missing. This prevents the `SigningConfig "release" is missing required property "storePassword"` error for local builds.
+The `release` signing config should look like this:
+```kotlin
+        create("release") {
+            val envStorePassword = System.getenv("STORE_PASSWORD")
+            if (envStorePassword != null && envStorePassword.isNotBlank()) {
+                storeFile = file("keystore/release.keystore")
+                storePassword = envStorePassword
+                keyAlias = System.getenv("KEY_ALIAS")
+                keyPassword = System.getenv("KEY_PASSWORD")
+            } else {
+                storeFile = file("${System.getProperty("user.home")}/.android/debug.keystore")
+                storePassword = "android"
+                keyAlias = "androiddebugkey"
+                keyPassword = "android"
+            }
+        }
+```
+If this is already set, proceed with the build. If not, apply this fix first.
