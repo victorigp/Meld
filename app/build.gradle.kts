@@ -105,9 +105,9 @@ android {
                 keyAlias = System.getenv("KEY_ALIAS")
                 keyPassword = System.getenv("KEY_PASSWORD")
             } else {
-                storeFile = file("${System.getProperty("user.home")}/.android/debug.keystore")
+                storeFile = file("keystore/release.keystore")
                 storePassword = "android"
-                keyAlias = "androiddebugkey"
+                keyAlias = "android"
                 keyPassword = "android"
             }
         }

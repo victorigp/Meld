@@ -448,6 +448,11 @@
     <string name="spotify_login_error_rejected">Spotify rejected the request. Please try again later.</string>
     <string name="spotify_login_error_network">Network error. Please check your connection and try again.</string>
     <string name="spotify_login_success">Connected to Spotify</string>
+    <string name="spotify_login_manual">Login manual</string>
+    <string name="spotify_login_manual_title">Login con cookie sp_dc</string>
+    <string name="spotify_login_manual_instructions">Si el login automático falla (común en Android TV), puedes usar tu cookie sp_dc.\n\n1. Abre Chrome en un PC\n2. Ve a open.spotify.com e inicia sesión\n3. Pulsa F12 → Application → Cookies\n4. Copia el valor de la cookie llamada \"sp_dc\"\n5. Pégalo aquí abajo</string>
+    <string name="spotify_login_manual_hint">Pega el valor de tu cookie sp_dc aquí</string>
+    <string name="spotify_login_manual_invalid">Cookie sp_dc inválida. Debe ser un texto largo alfanumérico (normalmente empieza por \"AQ\").</string>
     <string name="spotify_token_expired">Spotify session expired, please log in again</string>
     <string name="spotify_no_tracks">No tracks found</string>
     <string name="spotify_mapping_info">The first time you play a song from Spotify, there may be a short delay while the app matches it to a YouTube Music equivalent. Subsequent plays will be instant thanks to local caching.</string>
