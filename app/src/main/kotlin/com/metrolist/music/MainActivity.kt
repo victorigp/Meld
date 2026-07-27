@@ -572,17 +572,27 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-        MetrolistTheme(
-            darkTheme = useDarkTheme,
-            pureBlack = pureBlack,
-            themeColor = themeColor,
+        val context = androidx.compose.ui.platform.LocalContext.current
+        val isTv = remember(context) { com.metrolist.music.ui.utils.isAndroidTv(context) }
+        val defaultIndication = androidx.compose.material3.ripple()
+        val indication = remember(isTv, defaultIndication) {
+            if (isTv) com.metrolist.music.ui.utils.TvFocusIndication(defaultIndication as androidx.compose.foundation.IndicationNodeFactory) else defaultIndication
+        }
+
+        CompositionLocalProvider(
+            androidx.compose.foundation.LocalIndication provides indication
         ) {
-            BoxWithConstraints(
-                modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .background(if (pureBlack) Color.Black else MaterialTheme.colorScheme.surface),
+            MetrolistTheme(
+                darkTheme = useDarkTheme,
+                pureBlack = pureBlack,
+                themeColor = themeColor,
             ) {
+                BoxWithConstraints(
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .background(if (pureBlack) Color.Black else MaterialTheme.colorScheme.surface),
+                ) {
                 val density = LocalDensity.current
                 val configuration = LocalWindowInfo.current
                 val cutoutInsets = WindowInsets.displayCutout
@@ -1336,6 +1346,7 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+}
 
     /**
      * Handles the ACTION_RECOGNITION intent sent from the Music Recognizer Widget.

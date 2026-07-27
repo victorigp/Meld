@@ -216,6 +216,23 @@ android {
     }
 }
 
+tasks.matching { it.name.startsWith("assemble") && it.name.endsWith("Release") }.configureEach {
+    val buildPathStr = project.layout.buildDirectory.get().asFile.absolutePath
+    val taskNameStr = this.name
+    doLast {
+        val buildFlavor = taskNameStr.replace("assemble", "").replace("Release", "").replaceFirstChar { it.lowercase() }
+        val apkDir = File(buildPathStr, "outputs/apk/$buildFlavor/release")
+        apkDir.listFiles()?.forEach { apkFile ->
+            if (apkFile.name.endsWith(".apk") && apkFile.name != "Meld_Victor.apk") {
+                val newFile = File(apkDir, "Meld_Victor.apk")
+                if (newFile.exists()) newFile.delete()
+                apkFile.copyTo(newFile, overwrite = true)
+                apkFile.delete()
+            }
+        }
+    }
+}
+
 ksp {
     arg("room.schemaLocation", "$projectDir/schemas")
 }
