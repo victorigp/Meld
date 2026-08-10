@@ -3292,6 +3292,21 @@ class MusicService :
             }
         }
 
+        // A 403 can also mean the cipher produced a wrong-but-non-throwing signature from a
+        // stale/wrong player config — invisible to the cipher's own exception-retry. Ask it to
+        // re-fetch its config (rate-limited); if that corrects the table, PlayerConfigStore's
+        // configEpoch advances and the cipher rebuilds its WebView on the next decipher, so the
+        // retry below re-resolves the URL with the corrected recipe — no app restart needed.
+        scope.launch {
+            try {
+                if (CipherDeobfuscator.onStreamRejected()) {
+                    Timber.tag(TAG).d("Player config changed after stream rejection for $mediaId")
+                }
+            } catch (e: Exception) {
+                Timber.tag(TAG).e(e, "onStreamRejected failed for $mediaId")
+            }
+        }
+
         retryJob?.cancel()
         retryJob = scope.launch {
             // Slightly longer delay on 403 errors
