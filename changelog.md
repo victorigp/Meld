@@ -1,3 +1,83 @@
+---v0.9.2
+# What's new in Meld 0.9.2
+
+This is a major update that brings Meld up to date with six months of upstream improvements, alongside Meld-exclusive fixes and refinements.
+
+## 🎵 Better playback
+
+- **New playback engine (InnerTubeX)** — smarter client selection means fewer "Playback failed" errors and faster song starts
+- Fixed songs stopping after ~30 seconds
+- Fixed uploaded and restricted tracks not playing
+- Improved crossfade behavior between songs
+- Shuffle no longer picks the same song twice in a row
+
+## 🎙️ Podcasts
+
+- Full podcast support with channels, new episodes, and subscriptions
+- Save and restore your playback position on podcast episodes
+- Podcasts work even when not logged in
+
+## 😴 Sleep timer
+
+- Completely redesigned sleep timer with scheduling support
+- Smart options: finish current song, fade out volume gradually
+- Set an automatic timer that activates at a scheduled time
+
+## 🎤 Lyrics
+
+- Brand new lyrics pipeline — faster, more accurate
+- Line-synced lyrics pulled directly from YouTube Music
+- Copy all lyrics with one tap
+- Musixmatch removed (it was returning incorrect lyrics for most songs)
+
+## 🔍 Search & library
+
+- Play music directly from URLs pasted in the search bar
+- Search for user profiles
+- Playlist range selection — select multiple songs at once
+- Songs already in a playlist are now highlighted when adding
+- Fixed ghost adds on playlists
+
+## 📻 Android Auto
+
+- Reorderable sections — customize what you see first
+- Toggle YouTube playlists on/off
+- Quick-add playlists to your Auto library
+
+## 📊 Stats
+
+- Compare your top artists side by side
+- Weekly and monthly recap playlists
+- Play all songs directly from the stats page
+
+## 🎨 UI improvements
+
+- Redesigned song details, Last.fm settings, account settings, and details screens
+- New miniplayer background styles and playlist button
+- Improved speed dial layout on tablets and large screens
+- Fixed various crashes and UI glitches
+
+## ⬆️ Import & export
+
+- Export playlists and albums as CSV and M3U
+- Fixed CSV import crashes
+
+## 🔧 Under the hood
+
+- Updated to Metrolist v13.7.0 core
+- Refreshed Discord integration
+- Image cache now clears properly; cached covers show when offline
+- Quick settings tile for music recognition
+- Database migration preserved — your library, history, and playlists are safe
+
+## 🌍 Translations
+
+- Updated translations across 40+ languages
+
+---
+
+Thank you for using Meld! If you encounter any issues, please report them on [GitHub](https://github.com/FrancescoGrazioso/Meld/issues).
+
 ---v13.7.0
 # KMP status update
 Metrolist-KMP remains in alpha, but tester feedback has been very positive. To try it, join our Discord and donate at least $1 to support development.
