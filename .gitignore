@@ -112,3 +112,14 @@ app/src/main/cpp/coverart/
 
 # Local custom documentation
 chuleta_actualizacion.md
+
+# Agents dir
+.claude
+.antigravity*
+.gemini
+.opencode
+.cursor*
+.codeium
+.cortexkit
+.mcp.json
+*.har
