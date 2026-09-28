@@ -1464,6 +1464,7 @@ class MainActivity : FragmentActivity() {
         }
     }
 }
+}
 
     /**
      * Handles the ACTION_RECOGNITION intent sent from the Music Recognizer Widget.

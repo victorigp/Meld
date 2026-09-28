@@ -273,27 +273,7 @@ tasks.named("preBuild") {
     dependsOn(cleanLegacyProtoSources)
 }
 
-protobuf {
-    protoc {
-        artifact = "com.google.protobuf:protoc:${libs.versions.protobuf.get()}"
-    }
-    generateProtoTasks {
-        all().configureEach {
-            builtins {
-                create("java") { option("lite") }
-                create("kotlin") { option("lite") }
-            }
-        }
-    }
-}
 
-val cleanLegacyProtoSources = tasks.register<Delete>("cleanLegacyProtoSources") {
-    delete(layout.projectDirectory.dir("src/main/java/com/metrolist/music/listentogether/proto"))
-}
-
-tasks.named("preBuild") {
-    dependsOn(cleanLegacyProtoSources)
-}
 
 ksp {
     arg("room.schemaLocation", "$projectDir/schemas")
